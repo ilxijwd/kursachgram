@@ -1,0 +1,14 @@
+.appear-enter-active,
+.appear-leave-active {
+  transition-duration: 0.25s;
+}
+
+.appear-enter,
+.appear-leave-to {
+  transform: scale(0);
+}
+
+.appear-enter-to,
+.appear-leave {
+  transform: scale(1);
+}

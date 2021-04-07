@@ -17,7 +17,11 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
-  css: [],
+  css: [
+    '~/assets/animations/appear.scss',
+    '~/assets/animations/slide-right.scss',
+    '~/assets/animations/flip.scss',
+  ],
 
   plugins: [],
 
@@ -25,7 +29,16 @@ export default {
 
   buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/vuetify'],
 
-  modules: ['@nuxtjs/axios', 'nuxt-socket-io'],
+  modules: [
+    '@nuxtjs/axios',
+    'nuxt-socket-io',
+    [
+      'nuxt-vuex-localstorage',
+      {
+        localStorage: ['auth'],
+      },
+    ],
+  ],
 
   axios: {},
 
@@ -33,7 +46,23 @@ export default {
     sockets: [
       {
         url: 'http://localhost:8000',
-        vuex: {},
+        vuex: {
+          mutations: [
+            'connect --> socket/CONNECTED',
+            'connect_error --> socket/NO_CONNECTION',
+            'disconnect --> socket/NO_CONNECTION',
+            'invalid_token --> socket/INVALID_TOKEN',
+            'not_registered --> socket/NOT_REGISTERED',
+            'users --> chats/SET_USERS',
+            'user_online --> chats/SET_USER_ONLINE',
+            'user_offline --> chats/SET_USER_OFFLINE',
+            'chat_created --> chats/CREATE_CHAT',
+            'chat_renamed --> chats/RENAME_CHAT',
+            'chat_deleted --> chats/DELETE_CHAT',
+            'message_sent --> chats/RECEIVE_MESSAGE',
+            'message_deleted --> chats/DELETE_MESSAGE',
+          ],
+        },
         namespaces: {},
       },
     ],
