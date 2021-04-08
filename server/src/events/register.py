@@ -5,6 +5,8 @@ import jwt
 from werkzeug.security import generate_password_hash
 
 from src.db import session, User
+from src.responses import error, logged_in
+from src.errors import Errors
 
 
 def register_event(sio):
@@ -15,12 +17,11 @@ def register_event(sio):
         print('[sio] emitted: register')
 
         if not data or 'avatar_base64' not in data or 'username' not in data or 'email' not in data or 'password' not in data:
-            return {'success': False, 'error': 'Invalid request data'}
+            return error(sio, sid, Errors.INVALID_REQUEST_DATA)
 
         user = session.query(User).filter(User.email == data['email']).first()
-
         if user:
-            return {'success': False, 'error': 'That email is already in use'}
+            return error(sio, sid, Errors.EMAIL_ALREADY_IN_USE)
 
         new_user = User(
             email=data['email'],
@@ -39,8 +40,4 @@ def register_event(sio):
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24 * 30)
         }
 
-        return {
-            'success': True,
-            'token': jwt.encode(payload, os.environ.get("JWT_SECRET"), algorithm='HS256'),
-            'account_data': new_user.jsonify()
-        }
+        logged_in(sio, sid, jwt.encode(payload, os.environ.get("JWT_SECRET"), algorithm='HS256'), new_user.jsonify())

@@ -4,15 +4,15 @@
       <v-list>
         <v-list-item two-line>
           <v-list-item-avatar>
-            <img :src="account_data.avatar_base64" />
+            <img :src="user.avatar_base64" />
           </v-list-item-avatar>
 
           <v-list-item-content>
             <v-list-item-title>
-              {{ account_data.username }}
+              {{ user.username }}
             </v-list-item-title>
             <v-list-item-subtitle>
-              {{ account_data.email }}
+              {{ user.email }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -96,39 +96,10 @@
     </v-dialog>
     <v-footer app fixed class="flex justify-center">
       <transition name="appear">
-        <v-btn
-          v-if="$store.state.chats.listIsSelective"
-          absolute
-          top
-          right
-          fab
-          color="red"
-        >
+        <v-btn v-if="listIsSelective" absolute top right fab color="red">
           <v-icon>mdi-delete</v-icon>
         </v-btn>
       </transition>
-      <!-- <v-speed-dial
-        v-else
-        v-model="fab"
-        absolute
-        bottom
-        right
-        open-on-hover
-        transition="slide-y-reverse-transition"
-      >
-        <template #activator>
-          <v-btn v-model="fab" color="blue darken-2" dark fab>
-            <v-icon v-if="fab">mdi-close</v-icon>
-            <v-icon v-else>mdi-plus</v-icon>
-          </v-btn>
-        </template>
-        <v-btn fab dark small color="red">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-        <v-btn fab dark small color="indigo">
-          <v-icon>mdi-account-group</v-icon>
-        </v-btn>
-      </v-speed-dial> -->
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
@@ -147,13 +118,15 @@ export default {
     }
   },
   computed: {
-    ...mapState('auth', ['account_data']),
+    ...mapState('auth', ['user']),
+    ...mapState('chats', ['listIsSelective']),
   },
   mounted() {
     this.socket = this.$nuxtSocket({
       auth: {
         token: this.$store.state.auth.token,
       },
+      name: 'main',
       persist: true,
     })
   },

@@ -1,14 +1,5 @@
 export default {
-  HAS_ERROR(state) {
-    return state.error !== null
-  },
-  ERROR_TYPE(state) {
-    return state?.error?.type
-  },
-  ERROR_TITLE(state) {
-    return state?.error?.title
-  },
-  ERROR_DESCRIPTION(state) {
-    return state?.error?.description
-  },
+  HAS_ERROR: (state) => state.currentErrorCode !== -1,
+  ERROR: (state) =>
+    state.errors.find((e) => e.code === state.currentErrorCode) || {},
 }

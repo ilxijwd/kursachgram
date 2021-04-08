@@ -1,5 +1,5 @@
-from .invalid_token import invalid_token
-from .not_registered import not_registered
+from .error import error
+from .logged_in import logged_in
 from .users import users
 from .user_online import user_online
 from .user_offline import user_offline

@@ -1,37 +1,25 @@
-import os
-
-import jwt
-
-from src.db import session, User, Chat
-from src.responses import not_registered, invalid_token, message_sent
+from src.db import session, Chat
+from src.responses import error, message_sent
+from src.errors import Errors
 
 
 def register_event(sio):
     print('[sio] event registered: send_message')
 
     @sio.event
-    def send_message(sid, data, auth=None):
+    def send_message(sid, data):
         print('[sio] emitted: send_message')
 
-        if not auth or 'token' not in auth:
-            return
+        user_session = sio.get_session(sid)
+        if not user_session:
+            return error(sio, sid, Errors.NOT_AUTHENTICATED)
 
-        if not data or 'sender_id' not in data or 'chat_id' not in data or 'content' not in data:
-            return
-
-        try:
-            payload = jwt.decode(auth['token'], os.environ.get("JWT_SECRET"), algorithms=['HS256'])
-        except (jwt.DecodeError, jwt.ExpiredSignatureError, jwt.InvalidSignatureError):
-            return invalid_token(sio, sid)
-
-        user = session.query(User).filter(User.email == payload['email']).first()
-
-        if not user:
-            return not_registered(sio, sid)
+        if not data or 'chat_id' not in data or 'content' not in data:
+            return error(sio, sid, Errors.INVALID_REQUEST_DATA)
 
         chat = session.query(Chat).filter(Chat.id == data['chat_id']).first()
 
         if not chat:
-            return {'success': False, 'error': 'Chat was not found'}
+            return error(sio, sid, Errors.CHAT_WAS_NOT_FOUND)
 
-        message_sent(sio, data['sender_id'], chat.id, data['content'], data.get('files'))
+        message_sent(sio, user_session['id'], chat.id, data['content'], data.get('files'))

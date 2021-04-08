@@ -1,8 +1,11 @@
 <script>
 export default {
-  middleware({ store, redirect }) {
-    store.commit('auth/SET_TOKEN', '')
-    store.commit('auth/SET_ACCOUNT_DATA', {})
+  async middleware({ store, redirect }) {
+    await store.dispatch('$nuxtSocket/emit', {
+      label: 'main',
+      evt: 'logout',
+    })
+    store.commit('auth/RESET_LOGIN_DATA')
     return redirect('/')
   },
 }

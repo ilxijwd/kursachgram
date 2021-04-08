@@ -8,6 +8,15 @@
           <nuxt-link to="/register">Click here to register</nuxt-link>
         </v-card-subtitle>
         <v-card-text>
+          <v-container>
+            <v-row>
+              <v-btn @click.stop="DEBUGCreateAccount('ilxijwd')">
+                ilxijwd
+              </v-btn>
+              <v-spacer />
+              <v-btn @click.stop="DEBUGCreateAccount('iluxan')"> iluxan </v-btn>
+            </v-row>
+          </v-container>
           <v-form ref="form" v-model="valid">
             <v-text-field
               v-model="email"
@@ -81,20 +90,30 @@ export default {
     }
   },
   mounted() {
-    this.socket = this.$nuxtSocket({})
+    this.unsubscribe = this.$store.subscribe((mutation) => {
+      if (mutation.type === 'auth/SET_LOGIN_DATA') {
+        this.loading = false
+        this.$router.push('/chats')
+      }
+    })
+  },
+  beforeDestroy() {
+    this.unsubscribe()
   },
   methods: {
-    submit() {
+    DEBUGCreateAccount(nickname) {
+      this.email =
+        nickname === 'iluxan' ? 'syaivo01@gmail.com' : 'ilxijwd@gmail.com'
+      this.password = 'ayylmao69'
+    },
+    async submit() {
       if (!this.$refs.form.validate()) return
       this.loading = true
-      const { email, password } = this
-      this.socket.emit('login', { email, password }, (res) => {
-        this.loading = false
-        if (res.success) {
-          this.$store.commit('auth/SET_TOKEN', res.token)
-          this.$store.commit('auth/SET_ACCOUNT_DATA', res.account_data)
-          this.$router.push('/chats')
-        } else this.$store.commit('auth/SET_REQUEST_ERROR', res.error)
+
+      await this.$store.dispatch('$nuxtSocket/emit', {
+        label: 'main',
+        evt: 'login',
+        msg: { email: this.email, password: this.password },
       })
     },
   },

@@ -37,7 +37,7 @@ export default {
 
     const chat = state.chats.find((c) => c.id === incomingMessage.chat_id)
     if (chat) chat.messages.push(message)
-    else throw new Error('kernel panic: fuck you')
+    else throw new Error('kernel panic: stoopid')
   },
   DELETE_MESSAGE(state, msgData) {
     const chatToEditIdx = state.chats.findIndex((c) => c.id === msgData.chat_id)

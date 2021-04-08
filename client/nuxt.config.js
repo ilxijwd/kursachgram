@@ -45,14 +45,15 @@ export default {
   io: {
     sockets: [
       {
+        name: 'main',
         url: 'http://localhost:8000',
         vuex: {
           mutations: [
-            'connect --> socket/CONNECTED',
+            'connect --> socket/RESET_ERROR',
             'connect_error --> socket/NO_CONNECTION',
             'disconnect --> socket/NO_CONNECTION',
-            'invalid_token --> socket/INVALID_TOKEN',
-            'not_registered --> socket/NOT_REGISTERED',
+            'error --> socket/SET_ERROR',
+            'logged_in --> auth/SET_LOGIN_DATA',
             'users --> chats/SET_USERS',
             'user_online --> chats/SET_USER_ONLINE',
             'user_offline --> chats/SET_USER_OFFLINE',

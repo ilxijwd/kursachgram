@@ -17,4 +17,4 @@ for module in event_modules:
         print(f'[sio] module named "{module.__name__}" has no "register_event" function')
 
 app = socketio.WSGIApp(sio)
-wsgi.server(listen(('', 8000)), app)
+wsgi.server(listen(('', 8000)), app, log_output=False)

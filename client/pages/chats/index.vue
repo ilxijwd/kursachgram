@@ -127,12 +127,17 @@ export default {
       if (!this.listIsSelective)
         setTimeout(() => this.$router.push(`/chats/${chatId}`), this.holdTimeMs)
     },
-    createChat(participantsIds) {
-      participantsIds.push(this.$store.state.auth.account_data.id)
-      console.log('creating chat with participants:', participantsIds)
-      const socket = this.$nuxtSocket({})
-      console.log(socket)
-      socket.emit('create_chat', { participants_ids: participantsIds })
+    async createChat(participantsIds) {
+      await this.$store.dispatch('$nuxtSocket/emit', {
+        label: 'main',
+        evt: 'create_chat',
+        msg: {
+          participants_ids: [
+            ...participantsIds,
+            this.$store.state.auth.account_data.id,
+          ],
+        },
+      })
     },
   },
 }

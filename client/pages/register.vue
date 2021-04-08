@@ -10,16 +10,11 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col>
-                <v-btn @click.stop="DEBUGCreateAccount('ilxijwd')">
-                  Account ilxijwd
-                </v-btn>
-              </v-col>
-              <v-col>
-                <v-btn @click.stop="DEBUGCreateAccount('iluxan')">
-                  Account iluxan
-                </v-btn>
-              </v-col>
+              <v-btn @click.stop="DEBUGCreateAccount('ilxijwd')">
+                ilxijwd
+              </v-btn>
+              <v-spacer />
+              <v-btn @click.stop="DEBUGCreateAccount('iluxan')"> iluxan </v-btn>
             </v-row>
             <v-row justify="center">
               <transition name="appear">
@@ -135,7 +130,15 @@ export default {
     }
   },
   mounted() {
-    this.socket = this.$nuxtSocket({})
+    this.unsubscribe = this.$store.subscribe((mutation) => {
+      if (mutation.type === 'auth/SET_LOGIN_DATA') {
+        this.loading = false
+        this.$router.push('/chats')
+      }
+    })
+  },
+  beforeDestroy() {
+    this.unsubscribe()
   },
   methods: {
     DEBUGCreateAccount(nickname) {
@@ -157,26 +160,20 @@ export default {
         ? await this.fileToBase64(this.avatar)
         : ''
     },
-    submit() {
+    async submit() {
       if (!this.$refs.form.validate()) return
       this.loading = true
-      this.socket.emit(
-        'register',
-        {
+
+      await this.$store.dispatch('$nuxtSocket/emit', {
+        label: 'main',
+        evt: 'register',
+        msg: {
           username: this.username,
           email: this.email,
           password: this.password,
           avatar_base64: this.avatarBase64,
         },
-        (res) => {
-          this.loading = false
-          if (res.success) {
-            this.$store.commit('auth/SET_TOKEN', res.token)
-            this.$store.commit('auth/SET_ACCOUNT_DATA', res.account_data)
-            this.$router.push('/chats')
-          } else this.$store.commit('auth/SET_REQUEST_ERROR', res.error)
-        }
-      )
+      })
     },
   },
 }

@@ -1,7 +1,8 @@
 from datetime import datetime
 
 from src.db import session, User
-from src.responses import not_registered, user_offline
+from src.responses import user_offline, error
+from src.errors import Errors
 
 
 def register_event(sio):
@@ -12,18 +13,15 @@ def register_event(sio):
         print('[sio] emitted: disconnect')
 
         user_session = sio.get_session(sid)
-
-        # sid has no login data
-        if 'email' not in user_session:
+        if not user_session or 'email' not in user_session:
             return
 
         user = session.query(User).filter(User.email == user_session['email']).first()
-
         if not user:
-            return not_registered(sio, sid)
+            return error(sio, sid, Errors.NOT_AUTHENTICATED)
 
         user.online = False
         user.logout_timestamp = datetime.utcnow()
         session.commit()
 
-        return user_offline(sio, sid, user.id)
+        user_offline(sio, sid, user.id)

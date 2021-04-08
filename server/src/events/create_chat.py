@@ -1,40 +1,27 @@
-import os
-
-import jwt
-
 from src.db import session, User, Chat
-from src.responses import not_registered, invalid_token, chat_created
+from src.responses import error, chat_created
+from src.errors import Errors
 
 
 def register_event(sio):
     print('[sio] event registered: create_chat')
 
     @sio.event
-    def create_chat(sid, data, auth=None):
+    def create_chat(sid, data):
         print('[sio] emitted: create_chat')
 
-        if not auth or 'token' not in auth:
-            return
+        user_session = sio.get_session(sid)
+        if not user_session:
+            return error(sio, sid, Errors.NOT_AUTHENTICATED)
 
-        if not data or 'participants_ids' not in data:
-            return
-
-        try:
-            payload = jwt.decode(auth['token'], os.environ.get("JWT_SECRET"), algorithms=['HS256'])
-        except (jwt.DecodeError, jwt.ExpiredSignatureError, jwt.InvalidSignatureError):
-            return invalid_token(sio, sid)
-
-        user = session.query(User).filter(User.email == payload['email']).first()
-
-        if not user:
-            return not_registered(sio, sid)
-
-        if user.id not in data['participants_ids']:
-            return {'success': False, 'error': 'Creator must be in participants list too'}
+        if not data or 'participants_ids' not in data or user_session['id'] not in data['participants_ids']:
+            return error(sio, sid, Errors.INVALID_REQUEST_DATA)
 
         participants = session.query(User).filter(User.id.in_(data['participants_ids'])).all()
+        user = session.query(User).filter(User.id == user_session['id']).first()
+        participants.append(user)
         if len(participants) < 2:
-            return {'success': False, 'error': 'Not enough participants'}
+            return error(sio, sid, Errors.NOT_ENOUGH_PARTICIPANTS)
 
         chat = Chat(
             name=data.get('name'),
@@ -46,7 +33,7 @@ def register_event(sio):
         session.add(chat)
         session.commit()
 
-        for participant_id in chat.jsonify()['participants_ids']:
-            sio.enter_room(participant_id, chat.id)
+        for participant in participants:
+            sio.enter_room(participant.id, chat.id)
 
         chat_created(sio, chat, chat.id)

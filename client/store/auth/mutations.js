@@ -1,11 +1,10 @@
 export default {
-  SET_REQUEST_ERROR(state, error) {
-    state.request_error = error
+  SET_LOGIN_DATA(state, loginData) {
+    state.token = loginData.token
+    state.user = loginData.user
   },
-  SET_TOKEN(state, token) {
-    state.token = token
-  },
-  SET_ACCOUNT_DATA(state, accountData) {
-    state.account_data = accountData
+  RESET_LOGIN_DATA(state) {
+    state.token = ''
+    state.user = {}
   },
 }
