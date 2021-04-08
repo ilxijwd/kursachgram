@@ -11,6 +11,8 @@ def register_event(sio):
 
     @sio.event
     def create_chat(sid, data, auth=None):
+        print('[sio] emitted: create_chat')
+
         if not auth or 'token' not in auth:
             return
 

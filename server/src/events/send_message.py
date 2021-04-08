@@ -11,6 +11,8 @@ def register_event(sio):
 
     @sio.event
     def send_message(sid, data, auth=None):
+        print('[sio] emitted: send_message')
+
         if not auth or 'token' not in auth:
             return
 

@@ -9,6 +9,18 @@
         </v-card-subtitle>
         <v-card-text>
           <v-container>
+            <v-row>
+              <v-col>
+                <v-btn @click.stop="DEBUGCreateAccount('ilxijwd')">
+                  Account ilxijwd
+                </v-btn>
+              </v-col>
+              <v-col>
+                <v-btn @click.stop="DEBUGCreateAccount('iluxan')">
+                  Account iluxan
+                </v-btn>
+              </v-col>
+            </v-row>
             <v-row justify="center">
               <transition name="appear">
                 <v-avatar v-if="avatarBase64" size="128">
@@ -126,6 +138,12 @@ export default {
     this.socket = this.$nuxtSocket({})
   },
   methods: {
+    DEBUGCreateAccount(nickname) {
+      this.username = nickname
+      this.email =
+        nickname === 'iluxan' ? 'syaivo01@gmail.com' : 'ilxijwd@gmail.com'
+      this.password = 'ayylmao69'
+    },
     fileToBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader()

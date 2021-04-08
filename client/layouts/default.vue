@@ -154,6 +154,7 @@ export default {
       auth: {
         token: this.$store.state.auth.token,
       },
+      persist: true,
     })
   },
 }

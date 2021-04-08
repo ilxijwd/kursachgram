@@ -1,2 +1,2 @@
-def user_online(sio, sid, email):
-    sio.emit('user_online', {'email': email}, skip_sid=sid)
+def user_online(sio, sid, user_id):
+    sio.emit('user_online', {'id': user_id}, skip_sid=sid)

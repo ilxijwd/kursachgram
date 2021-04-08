@@ -17,7 +17,7 @@ base = declarative_base()
 class User(base):
     __tablename__ = 'users'
 
-    id = Column(GUID(), primary_key=True, default=str(uuid4()))
+    id = Column(GUID(), primary_key=True, default=uuid4)
     email = Column(String(100), unique=True)
     avatar_base64 = Column(Text)
     username = Column(String(100))

@@ -5,12 +5,12 @@ export default {
   SET_USERS(state, users) {
     state.users = users
   },
-  SET_USER_ONLINE(state, userData) {
-    const userIdx = state.users.findIndex((u) => u.id === userData.id)
+  SET_USER_ONLINE(state, user) {
+    const userIdx = state.users.findIndex((u) => u.id === user.id)
     if (userIdx !== -1) state.users[userIdx].online = true
   },
-  SET_USER_OFFLINE(state, userData) {
-    const userIdx = state.users.findIndex((u) => u.id === userData.id)
+  SET_USER_OFFLINE(state, user) {
+    const userIdx = state.users.findIndex((u) => u.id === user.id)
     if (userIdx !== -1) state.users[userIdx].online = false
   },
   CREATE_CHAT(state, chat) {

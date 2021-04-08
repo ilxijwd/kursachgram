@@ -11,6 +11,8 @@ def register_event(sio):
 
     @sio.event
     def delete_chat(sid, data, auth=None):
+        print('[sio] emitted: delete_chat')
+
         if not auth or 'token' not in auth:
             return
 

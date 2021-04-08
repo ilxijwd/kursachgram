@@ -11,6 +11,8 @@ def register_event(sio):
 
     @sio.event
     def rename_chat(sid, data, auth=None):
+        print('[sio] emitted: rename_chat')
+
         if not auth or 'token' not in auth:
             return
 

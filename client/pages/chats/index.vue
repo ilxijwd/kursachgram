@@ -15,7 +15,7 @@
             <template v-for="(user, index) in ONLINE_USERS">
               <v-list-item
                 :key="`user-${user.id}`"
-                @click.stop="$router.push(`/chats/`)"
+                @click.stop="createChat([user.id])"
               >
                 <v-list-item-avatar>
                   <img :src="user.avatar_base64" alt="" />
@@ -126,6 +126,13 @@ export default {
       this.mouseDownActive = false
       if (!this.listIsSelective)
         setTimeout(() => this.$router.push(`/chats/${chatId}`), this.holdTimeMs)
+    },
+    createChat(participantsIds) {
+      participantsIds.push(this.$store.state.auth.account_data.id)
+      console.log('creating chat with participants:', participantsIds)
+      const socket = this.$nuxtSocket({})
+      console.log(socket)
+      socket.emit('create_chat', { participants_ids: participantsIds })
     },
   },
 }

@@ -12,6 +12,8 @@ def register_event(sio):
 
     @sio.event
     def login(sid, data):
+        print('[sio] emitted: login')
+
         if not data or 'email' not in data or 'password' not in data:
             return {'success': False, 'error': 'Invalid request data'}
 

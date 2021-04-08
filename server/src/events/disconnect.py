@@ -9,6 +9,8 @@ def register_event(sio):
 
     @sio.event
     def disconnect(sid):
+        print('[sio] emitted: disconnect')
+
         user_session = sio.get_session(sid)
 
         # sid has no login data

@@ -11,6 +11,8 @@ def register_event(sio):
 
     @sio.event
     def connect(sid, environ, auth=None):
+        print('[sio] emitted: connect')
+
         # if not authenticated
         if not auth or 'token' not in auth:
             return
@@ -37,4 +39,4 @@ def register_event(sio):
         for chat in user.chats:
             sio.enter_room(user.sid, chat.id)
 
-        user_online(sio, sid, user.email)
+        user_online(sio, sid, user.id)
