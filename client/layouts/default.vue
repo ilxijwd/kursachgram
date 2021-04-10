@@ -20,18 +20,27 @@
 
       <v-divider></v-divider>
 
+      <dialogs-template dialog-name="online-users">
+        <template #content>
+          <dialogs-sidebar-online-users />
+        </template>
+      </dialogs-template>
+
       <v-list nav dense>
+        <v-list-item
+          link
+          @click.stop="drawer = !drawer || OPEN_DIALOG('online-users')"
+        >
+          <v-list-item-icon>
+            <v-icon>mdi-account</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Online users</v-list-item-title>
+        </v-list-item>
         <v-list-item link>
           <v-list-item-icon>
             <v-icon>mdi-account-multiple</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Create group</v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-icon>
-            <v-icon>mdi-account</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Contacts</v-list-item-title>
         </v-list-item>
         <v-list-item link>
           <v-list-item-icon>
@@ -106,16 +115,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data() {
-    return {
-      drawer: false,
-      messages: 1,
-      calls: 0,
-      fab: false,
-      search: false,
-    }
+    return { drawer: false, messages: 1, calls: 0, fab: false, search: false }
   },
   computed: {
     ...mapState('auth', ['user']),
@@ -129,6 +132,9 @@ export default {
       name: 'main',
       persist: true,
     })
+  },
+  methods: {
+    ...mapMutations('dialog', ['OPEN_DIALOG']),
   },
 }
 </script>

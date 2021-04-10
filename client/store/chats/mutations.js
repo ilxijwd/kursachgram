@@ -32,7 +32,7 @@ export default {
     const message = {
       ...incomingMessage,
       unread: true,
-      recieved_time: timestamp,
+      recieved_at: timestamp,
     }
 
     const chat = state.chats.find((c) => c.id === incomingMessage.chat_id)
