@@ -15,7 +15,7 @@ export default {
   },
   CREATE_CHAT(state, chat) {
     state.chats.push({
-      ...chat,
+      ...chat.chat,
       messages: [],
     })
   },

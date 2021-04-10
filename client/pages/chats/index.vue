@@ -47,7 +47,11 @@
                     <v-icon v-if="listIsSelective && active" color="white">
                       mdi-check
                     </v-icon>
-                    <img v-else src="" alt="" />
+                    <img
+                      v-else
+                      :src="CHAT_AVATAR(chat.id, $store.state.auth.user.id)"
+                      alt=""
+                    />
                   </transition>
                 </v-list-item-avatar>
                 <v-list-item-content>
@@ -102,7 +106,7 @@ export default {
   },
   computed: {
     ...mapState('chats', ['listIsSelective', 'chats', 'onlineUsers']),
-    ...mapGetters('chats', ['ONLINE_USERS']),
+    ...mapGetters('chats', ['ONLINE_USERS', 'CHAT_AVATAR']),
   },
   watch: {
     selectedChats(newItem) {
@@ -132,12 +136,10 @@ export default {
         label: 'main',
         evt: 'create_chat',
         msg: {
-          participants_ids: [
-            ...participantsIds,
-            this.$store.state.auth.account_data.id,
-          ],
+          participants_ids: [...participantsIds],
         },
       })
+      // this.$router.push(`/chats/${participantsIds}`)
     },
   },
 }

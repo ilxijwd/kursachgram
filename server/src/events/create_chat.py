@@ -14,7 +14,7 @@ def register_event(sio):
         if not user_session:
             return error(sio, sid, Errors.NOT_AUTHENTICATED)
 
-        if not data or 'participants_ids' not in data or user_session['id'] not in data['participants_ids']:
+        if not data or 'participants_ids' not in data:
             return error(sio, sid, Errors.INVALID_REQUEST_DATA)
 
         participants = session.query(User).filter(User.id.in_(data['participants_ids'])).all()
@@ -34,6 +34,7 @@ def register_event(sio):
         session.commit()
 
         for participant in participants:
-            sio.enter_room(participant.id, chat.id)
+            print(f'joining {participant.sid} to {chat.id}')
+            sio.enter_room(participant.sid, chat.id)
 
         chat_created(sio, chat, chat.id)

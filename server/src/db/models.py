@@ -57,7 +57,7 @@ chat_participants = Table(
 class Chat(base):
     __tablename__ = 'chats'
 
-    id = Column(GUID(), primary_key=True, default=str(uuid4()))
+    id = Column(GUID(), primary_key=True, default=uuid4)
     name = Column(Text, nullable=True)
     avatar_base64 = Column(Text, nullable=True)
     creator_id = Column(Integer, ForeignKey("users.id"))
