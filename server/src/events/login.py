@@ -5,7 +5,7 @@ import jwt
 from werkzeug.security import check_password_hash
 
 from src.db import session, User
-from src.responses import error, logged_in, users, user_online
+from src.responses import error, logged_in, users, chats, user_online
 from src.errors import Errors
 
 
@@ -35,16 +35,20 @@ def register_event(sio):
         session.commit()
 
         payload = {
-            'email': user.email,
+            'id': user.id,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24 * 30)
         }
 
-        logged_in(sio, sid, jwt.encode(payload, os.environ.get("JWT_SECRET"), algorithm='HS256'), user.jsonify())
+        logged_in(sio, sid, jwt.encode(payload, os.environ.get("JWT_SECRET"), algorithm='HS256'), user)
 
-        registered_users = session.query(User).filter(User.id != user.id).all()
-        users(sio, sid, registered_users)
+        sio.save_session(sid, user.jsonify())
+
+        user_online(sio, sid, user)
+
+        chats(sio, sid, user.chats)
 
         for chat in user.chats:
             sio.enter_room(user.sid, chat.id)
 
-        user_online(sio, sid, user.id)
+        registered_users = session.query(User).filter(User.id != user.id).all()
+        users(sio, sid, registered_users)

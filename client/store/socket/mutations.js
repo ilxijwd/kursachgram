@@ -1,4 +1,7 @@
 export default {
+  SET_LOADING(state, status) {
+    state.loading = status
+  },
   RESET_ERROR(state) {
     state.currentErrorCode = -1
   },

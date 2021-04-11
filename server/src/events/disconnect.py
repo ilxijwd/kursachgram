@@ -16,7 +16,7 @@ def register_event(sio):
         if not user_session or 'email' not in user_session:
             return
 
-        user = session.query(User).filter(User.email == user_session['email']).first()
+        user = session.query(User).filter(User.id == user_session['id']).first()
         if not user:
             return error(sio, sid, Errors.NOT_AUTHENTICATED)
 
@@ -24,4 +24,4 @@ def register_event(sio):
         user.logout_timestamp = datetime.utcnow()
         session.commit()
 
-        user_offline(sio, sid, user.id)
+        user_offline(sio, sid, user)

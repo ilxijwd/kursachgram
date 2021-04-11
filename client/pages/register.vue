@@ -88,10 +88,11 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   layout: 'non-authorized',
   middleware({ store, redirect }) {
-    if (store.state.auth.token) return redirect('/chats')
+    if (store.state.app.me.token) return redirect('/chats')
   },
   data() {
     const required = (field) => (v) => !!v || `${field} is required`
@@ -104,7 +105,6 @@ export default {
 
     return {
       valid: true,
-      loading: false,
       registrationError: '',
       avatar: null,
       avatarBase64: '',
@@ -129,16 +129,8 @@ export default {
       ],
     }
   },
-  mounted() {
-    this.unsubscribe = this.$store.subscribe((mutation) => {
-      if (mutation.type === 'auth/SET_LOGIN_DATA') {
-        this.loading = false
-        this.$router.push('/chats')
-      }
-    })
-  },
-  beforeDestroy() {
-    this.unsubscribe()
+  computed: {
+    ...mapState('socket', ['loading']),
   },
   methods: {
     DEBUGCreateAccount(nickname) {
@@ -162,7 +154,7 @@ export default {
     },
     async submit() {
       if (!this.$refs.form.validate()) return
-      this.loading = true
+      this.$store.commit('socket/SET_LOADING', true)
 
       await this.$store.dispatch('$nuxtSocket/emit', {
         label: 'main',

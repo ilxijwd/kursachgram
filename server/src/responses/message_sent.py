@@ -1,15 +1,16 @@
 from uuid import uuid4
 
 
-def message_sent(sio, sender_id, chat_id, content, files=None):
+def message_sent(sio, sender, chat, content, files=None):
+    chat_data = chat.jsonify()
     sio.emit(
         'message_sent',
         {
             'id': str(uuid4()),
-            'sender_id': sender_id,
-            'сhat_id': chat_id,
+            'sender': sender.jsonify(),
+            'сhat': chat_data,
             'content': content,
             'files': files or [],
         },
-        room=chat_id,
+        room=chat_data['id'],
     )

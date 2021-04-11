@@ -4,15 +4,15 @@
       <v-list>
         <v-list-item two-line>
           <v-list-item-avatar>
-            <img :src="user.avatar_base64" />
+            <img :src="me.avatar_base64" />
           </v-list-item-avatar>
 
           <v-list-item-content>
             <v-list-item-title>
-              {{ user.username }}
+              {{ me.username }}
             </v-list-item-title>
             <v-list-item-subtitle>
-              {{ user.email }}
+              {{ me.email }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -73,7 +73,7 @@
       <v-tabs color="white" centered>
         <v-tabs-slider color="white" />
         <v-tab @click.stop="$router.push('/chats')">
-          <v-badge dot :value="messages">Chats</v-badge>
+          <v-badge dot :value="UNREAD_MESSAGES_COUNT">Chats</v-badge>
         </v-tab>
         <v-tab @click.stop="$router.push('/calls')">
           <v-badge dot :value="calls">Calls</v-badge>
@@ -115,19 +115,19 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
   data() {
     return { drawer: false, messages: 1, calls: 0, fab: false, search: false }
   },
   computed: {
-    ...mapState('auth', ['user']),
-    ...mapState('chats', ['listIsSelective']),
+    ...mapState('app', ['me', 'listIsSelective']),
+    ...mapGetters('app', ['UNREAD_MESSAGES_COUNT']),
   },
   mounted() {
     this.socket = this.$nuxtSocket({
       auth: {
-        token: this.$store.state.auth.token,
+        token: this.$store.state.app.me.token,
       },
       name: 'main',
       persist: true,

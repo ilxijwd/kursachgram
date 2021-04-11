@@ -1,4 +1,5 @@
 export default () => ({
+  loading: false,
   currentErrorCode: -1,
   errors: [
     {

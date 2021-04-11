@@ -34,7 +34,6 @@ def register_event(sio):
         session.commit()
 
         for participant in participants:
-            print(f'joining {participant.sid} to {chat.id}')
             sio.enter_room(participant.sid, chat.id)
 
-        chat_created(sio, chat, chat.id)
+        chat_created(sio, chat)

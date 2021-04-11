@@ -1,2 +1,2 @@
-def users(sio, sid, registered_users):
-    sio.emit('users', list(map(lambda u: u.jsonify(), registered_users)), room=sid)
+def users(sio, sid, online_users):
+    sio.emit('users', list(map(lambda u: u.jsonify(), online_users)), room=sid)

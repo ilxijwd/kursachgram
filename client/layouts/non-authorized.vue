@@ -2,10 +2,6 @@
   <v-app dark>
     <v-app-bar app fixed>
       <v-app-bar-title>Kursachgram</v-app-bar-title>
-      <v-spacer />
-      <v-avatar v-if="!!avatar_base64">
-        <img :src="avatar_base64" alt="" />
-      </v-avatar>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -22,18 +18,22 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 export default {
-  computed: {
-    ...mapState('auth', {
-      avatar_base64: (state) => state.user.avatar_base64,
-    }),
-  },
   mounted() {
+    this.unsubscribe = this.$store.subscribe((mutation) => {
+      if (mutation.type === 'app/LOGGED_IN') {
+        this.$store.commit('socket/SET_LOADING', false)
+        this.$router.push('/chats')
+      }
+    })
+
     this.socket = this.$nuxtSocket({
       name: 'main',
       persist: true,
     })
+  },
+  beforeDestroy() {
+    this.unsubscribe()
   },
 }
 </script>

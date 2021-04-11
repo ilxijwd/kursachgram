@@ -5,7 +5,7 @@ import jwt
 from werkzeug.security import generate_password_hash
 
 from src.db import session, User
-from src.responses import error, logged_in
+from src.responses import error, logged_in, user_online, users
 from src.errors import Errors
 
 
@@ -36,8 +36,15 @@ def register_event(sio):
         session.commit()
 
         payload = {
-            'email': new_user.email,
+            'id': new_user.id,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24 * 30)
         }
 
-        logged_in(sio, sid, jwt.encode(payload, os.environ.get("JWT_SECRET"), algorithm='HS256'), new_user.jsonify())
+        logged_in(sio, sid, jwt.encode(payload, os.environ.get("JWT_SECRET"), algorithm='HS256'), new_user)
+
+        sio.save_session(sid, new_user.jsonify())
+
+        user_online(sio, sid, new_user)
+
+        online_users = session.query(User).filter(User.id != new_user.id).all()
+        users(sio, sid, online_users)

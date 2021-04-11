@@ -28,4 +28,4 @@ def register_event(sio):
         session.delete(chat)
         session.commit()
 
-        chat_deleted(sio, chat.id)
+        chat_deleted(sio, chat)

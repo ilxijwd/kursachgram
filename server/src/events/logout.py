@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from src.db import session, User
 from src.responses import error, user_offline
 from src.errors import Errors
@@ -19,11 +21,12 @@ def register_event(sio):
             return error(sio, sid, Errors.USER_BY_EMAIL_NOT_FOUND)  # TODO: CHANGE ERROR CODE TO "USER_NOT_FOUND"
 
         user.online = False
+        user.logout_timestamp = datetime.utcnow()
         session.commit()
 
         for chat in user.chats:
             sio.leave_room(user.sid, chat.id)
 
-        user_offline(sio, sid, user.id)
+        user_offline(sio, sid, user)
 
         sio.save_session(sid, None)

@@ -7,27 +7,26 @@
     <template v-else>
       <v-card-subtitle> Select someone who's online: </v-card-subtitle>
       <v-card-text>
-        <v-list class="mt-3">
-          <v-subheader>
+        <v-list subheader>
+          <v-subheader class="px-0">
             {{ ONLINE_USERS.length }}
             {{ ONLINE_USERS.length === 1 ? 'user' : 'users' }} online
           </v-subheader>
-          <v-list-item-group>
-            <template v-for="(user, index) in ONLINE_USERS">
-              <v-list-item
-                :key="`user-${user.id}`"
-                @click.stop="createChat(user.id)"
-              >
-                <v-list-item-avatar>
-                  <img :src="user.avatar_base64" alt="" />
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title v-text="user.username" />
-                </v-list-item-content>
-              </v-list-item>
-              <v-divider v-if="index < ONLINE_USERS.length - 1" :key="index" />
-            </template>
-          </v-list-item-group>
+          <transition-group name="slide-right">
+            <v-list-item
+              v-for="user in ONLINE_USERS"
+              :key="`user-${user.id}`"
+              class="px-0"
+              @click.stop="createChat(user.id)"
+            >
+              <v-list-item-avatar>
+                <img :src="user.avatar_base64" alt="" />
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title v-text="user.username" />
+              </v-list-item-content>
+            </v-list-item>
+          </transition-group>
         </v-list>
       </v-card-text>
     </template>
@@ -35,10 +34,32 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   computed: {
-    ...mapGetters('chats', ['ONLINE_USERS']),
+    ...mapGetters('app', ['ONLINE_USERS']),
+  },
+  mounted() {
+    this.unsubscribe = this.$store.subscribe((mutation) => {
+      if (mutation.type === 'app/CHAT_CREATED') {
+        this.CLOSE_DIALOG('online-users')
+        this.$router.push(`/chats/${mutation.payload.id}`)
+      }
+    })
+  },
+  beforeDestroy() {},
+  methods: {
+    ...mapMutations('dialog', ['CLOSE_DIALOG']),
+    async createChat(userId) {
+      await this.$store.dispatch('$nuxtSocket/emit', {
+        label: 'main',
+        evt: 'create_chat',
+        msg: {
+          sender_id: this.$store.state.app.me.token,
+          participants_ids: [userId],
+        },
+      })
+    },
   },
 }
 </script>

@@ -28,4 +28,4 @@ def register_event(sio):
         chat.name = data['name']
         session.commit()
 
-        chat_renamed(sio, chat.id, data['name'])
+        chat_renamed(sio, chat)

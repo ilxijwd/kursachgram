@@ -1,4 +1,4 @@
-from src.db import session, Chat
+from src.db import session, Chat, User
 from src.responses import error, message_sent
 from src.errors import Errors
 
@@ -18,8 +18,12 @@ def register_event(sio):
             return error(sio, sid, Errors.INVALID_REQUEST_DATA)
 
         chat = session.query(Chat).filter(Chat.id == data['chat_id']).first()
+        user = session.query(User).filter(User.id == user_session['id']).first()
 
         if not chat:
             return error(sio, sid, Errors.CHAT_WAS_NOT_FOUND)
 
-        message_sent(sio, user_session['id'], chat.id, data['content'], data.get('files'))
+        if not user:
+            return
+
+        message_sent(sio, user, chat, data['content'], data.get('files'))

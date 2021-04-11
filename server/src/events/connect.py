@@ -3,7 +3,7 @@ import os
 import jwt
 
 from src.db import session, User
-from src.responses import users, user_online, error
+from src.responses import me, users, chats, user_online, error
 from src.errors import Errors
 
 
@@ -22,7 +22,8 @@ def register_event(sio):
         except (jwt.DecodeError, jwt.ExpiredSignatureError, jwt.InvalidSignatureError):
             return error(sio, sid, Errors.INVALID_AUTHENTICATION_TOKEN)
 
-        user = session.query(User).filter(User.email == jwt_payload['email']).first()
+        user = session.query(User).filter(User.id == jwt_payload['id']).first()
+        # TODO: REFACTOR THIS PART
         if not user:
             return error(sio, sid, Errors.NOT_AUTHENTICATED)
 
@@ -32,10 +33,14 @@ def register_event(sio):
 
         sio.save_session(sid, user.jsonify())
 
-        registered_users = session.query(User).filter(User.id != user.id).all()
-        users(sio, sid, registered_users)
+        me(sio, sid, user)
+
+        chats(sio, sid, user.chats)
 
         for chat in user.chats:
             sio.enter_room(user.sid, chat.id)
 
-        user_online(sio, sid, user.id)
+        user_online(sio, sid, user)
+
+        online_users = session.query(User).filter(User.id != user.id).all()
+        users(sio, sid, online_users)

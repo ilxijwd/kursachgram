@@ -1,10 +1,6 @@
 <template>
-  <v-dialog :value="openedDialogs.includes(dialogName)" max-width="290">
+  <v-dialog v-model="isOpened" max-width="290">
     <slot name="content" />
-    <v-spacer />
-    <v-btn color="blue" text @click.stop="CLOSE_DIALOG(dialogName)">
-      Close
-    </v-btn>
   </v-dialog>
 </template>
 
@@ -19,6 +15,14 @@ export default {
   },
   computed: {
     ...mapState('dialog', ['openedDialogs']),
+    isOpened: {
+      set() {
+        this.CLOSE_DIALOG(this.dialogName)
+      },
+      get() {
+        return this.openedDialogs.includes(this.dialogName)
+      },
+    },
   },
   methods: {
     ...mapMutations('dialog', ['CLOSE_DIALOG']),

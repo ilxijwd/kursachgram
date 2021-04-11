@@ -71,7 +71,7 @@ class Chat(base):
             'name': self.name,
             'avatar_base64': self.avatar_base64,
             'creator_id': self.creator_id,
-            'participants_ids': list(map(lambda p: p.id, self.participants)),
+            'participants': list(map(lambda p: p.jsonify(), self.participants)),
         }
 
     def __repr__(self):

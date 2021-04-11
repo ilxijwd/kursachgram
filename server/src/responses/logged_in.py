@@ -1,2 +1,4 @@
 def logged_in(sio, sid, token, user):
-    sio.emit('logged_in', {'token': token, 'user': user}, room=sid)
+    user_data = user.jsonify()
+    user_data['token'] = token
+    sio.emit('logged_in', user_data, room=sid)

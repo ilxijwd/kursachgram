@@ -35,7 +35,7 @@ export default {
     [
       'nuxt-vuex-localstorage',
       {
-        localStorage: ['auth'],
+        localStorage: ['app'],
       },
     ],
   ],
@@ -46,22 +46,23 @@ export default {
     sockets: [
       {
         name: 'main',
-        url: 'http://192.168.0.102:8000',
+        url: 'http://192.168.0.105:8000',
         vuex: {
           mutations: [
             'connect --> socket/RESET_ERROR',
             'connect_error --> socket/NO_CONNECTION',
             'disconnect --> socket/NO_CONNECTION',
             'error --> socket/SET_ERROR',
-            'logged_in --> auth/SET_LOGIN_DATA',
-            'users --> chats/SET_USERS',
-            'user_online --> chats/SET_USER_ONLINE',
-            'user_offline --> chats/SET_USER_OFFLINE',
-            'chat_created --> chats/CREATE_CHAT',
-            'chat_renamed --> chats/RENAME_CHAT',
-            'chat_deleted --> chats/DELETE_CHAT',
-            'message_sent --> chats/RECEIVE_MESSAGE',
-            'message_deleted --> chats/DELETE_MESSAGE',
+            'logged_in --> app/LOGGED_IN',
+            'logged_out --> app/LOGGED_OUT',
+            'users --> app/USERS',
+            'chats --> app/CHATS',
+            'user_online --> app/USER_ONLINE',
+            'user_offline --> app/USER_OFFLINE',
+            'chat_created --> app/CHAT_CREATED',
+            'chat_renamed --> app/CHAT_RENAMED',
+            'chat_deleted --> app/CHAT_DELETED',
+            'message_sent --> app/MESSAGE_SENT',
           ],
         },
         namespaces: {},

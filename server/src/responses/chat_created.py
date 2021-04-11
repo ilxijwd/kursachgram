@@ -1,2 +1,3 @@
-def chat_created(sio, chat, room_id):
-    sio.emit('chat_created', {'chat': chat.jsonify()}, room=room_id)
+def chat_created(sio, chat):
+    chat_data = chat.jsonify()
+    sio.emit('chat_created', chat_data, room=chat_data['id'])

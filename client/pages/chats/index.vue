@@ -1,91 +1,65 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6">
-      <template v-if="PRIVATE_MESSAGES.length !== 0">
+      <template v-if="chats.length !== 0">
         <v-card>
-          <v-card-title>Direct messages</v-card-title>
+          <v-card-title v-if="UNREAD_MESSAGES_COUNT > 0">
+            You have {{ UNREAD_MESSAGES_COUNT }} unread messages
+          </v-card-title>
+          <v-card-title v-else>Available chats</v-card-title>
         </v-card>
-        <v-list two-line class="mt-3">
-          <v-list-item-group
-            v-model="selectedChats"
-            multiple
-            active-class="blue--text"
-          >
-            <template v-for="(message, index) in PRIVATE_MESSAGES">
-              <v-list-item
-                :key="message.recieved_at"
-                @mousedown.stop="mouseDown(index, message.chat.id)"
-                @mouseup.stop="mouseUp(message.chat.id)"
-              >
-                <template #default="{ active }">
-                  <v-list-item-avatar color="blue">
-                    <transition name="flip" mode="out-in">
-                      <v-icon v-if="listIsSelective && active" color="white">
-                        mdi-check
-                      </v-icon>
-                      <img
-                        v-else
-                        :src="
-                          CHAT_AVATAR(
-                            message.chat.id,
-                            $store.state.auth.user.id
-                          )
-                        "
-                        alt=""
-                      />
-                    </transition>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{
-                        message.chat.participants_ids.find(
-                          (p) => p !== $store.state.auth.user.id
-                        ).username
-                      }}
-                    </v-list-item-title>
-                    <v-list-item-subtitle class="text--primary">
-                      {{
-                        message.sender_id === $store.state.auth.user.id
-                          ? 'You'
-                          : $store.state.chats.users.find(
-                              (u) => u.id === message.sender_id
-                            ).username
-                      }}:
-                      <template v-if="message.files.length > 1">
-                        <v-icon> mdi-file-document-multiple </v-icon>
-                        {{ message.files.length }} files
-                      </template>
-                      <template v-else-if="message.files.length === 1">
-                        <v-icon> mdi-file-document </v-icon>
-                        {{ message.files.length }} file
-                      </template>
-                      <template v-else>
-                        {{ message.content }}
-                      </template>
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-list-item-action-text v-text="message.recieved_at" />
-                    <v-chip v-if="message.chat.unread_messages_count > 0">
-                      {{ message.chat.unread_messages_count }}
-                    </v-chip>
-                  </v-list-item-action>
-                </template>
-              </v-list-item>
-              <v-divider v-if="index < chats.length - 1" :key="index" />
-            </template>
-          </v-list-item-group>
-        </v-list>
-      </template>
-      <template v-if="GROUP_MESSAGES.length !== 0">
         <v-card class="mt-3">
-          <v-card-title>Group messages</v-card-title>
+          <v-card-text class="px-0">
+            <v-list two-line>
+              <v-list-item-group
+                v-model="selectedChats"
+                multiple
+                active-class="blue--text"
+              >
+                <v-list-item
+                  v-for="chat in chats"
+                  :key="chat.id"
+                  @mousedown.stop="mouseDown(index, chat.id)"
+                  @mouseup.stop="mouseUp(chat.id)"
+                >
+                  <template #default="{ active }">
+                    <v-list-item-avatar color="blue">
+                      <transition name="flip" mode="out-in">
+                        <v-icon v-if="listIsSelective && active" color="white">
+                          mdi-check
+                        </v-icon>
+                        <img v-else :src="chat.avatar_base64" alt="" />
+                      </transition>
+                    </v-list-item-avatar>
+
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        <v-icon v-if="chat.participants.length > 2">
+                          mdi-account-multiple
+                        </v-icon>
+                        {{ chat.name }}
+                      </v-list-item-title>
+                      <v-list-item-subtitle class="text--primary">
+                        {{ GET_LATEST_MESSAGE(chat) }}
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+
+                    <v-list-item-action>
+                      <v-list-item-action-text>
+                        {{ GET_LATEST_ACTION_TIME(chat) }}
+                      </v-list-item-action-text>
+                      <v-chip v-if="GET_UNREAD_MESSAGES_COUNT(chat) > 0">
+                        {{ GET_UNREAD_MESSAGES_COUNT(chat) }}
+                      </v-chip>
+                    </v-list-item-action>
+                  </template>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-card-text>
         </v-card>
-        <v-list two-line class="mt-3"> </v-list>
       </template>
-      <template
-        v-if="PRIVATE_MESSAGES.length === 0 && GROUP_MESSAGES.length === 0"
-      >
+      <template v-else>
         <v-card>
           <v-card-title>No messages 😢</v-card-title>
           <v-card-subtitle>
@@ -110,12 +84,13 @@ export default {
     }
   },
   computed: {
-    ...mapState('chats', ['listIsSelective', 'chats', 'onlineUsers']),
-    ...mapGetters('chats', [
+    ...mapState('app', ['listIsSelective', 'chats', 'onlineUsers']),
+    ...mapGetters('app', [
       'ONLINE_USERS',
-      'CHAT_AVATAR',
-      'PRIVATE_MESSAGES',
-      'GROUP_MESSAGES',
+      'UNREAD_MESSAGES_COUNT',
+      'GET_LATEST_MESSAGE',
+      'GET_LATEST_ACTION_TIME',
+      'GET_UNREAD_MESSAGES_COUNT',
     ]),
   },
   watch: {
@@ -124,7 +99,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('chats', ['SET_LIST_IS_SELECTIVE']),
+    ...mapMutations('app', ['SET_LIST_IS_SELECTIVE']),
     mouseDown(itemIndex) {
       this.mouseDownActive = true
       setTimeout(() => {
