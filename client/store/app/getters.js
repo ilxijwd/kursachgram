@@ -4,7 +4,7 @@ export default {
     Array.from(state.users).sort((u, _) => (u.online ? -1 : 1)),
   UNREAD_MESSAGES_COUNT: (state) =>
     state.chats
-      .filter((c) => c.messages.filter((m) => m.unread).length)
+      .map((c) => c.messages.filter((m) => !m.seen).length)
       .reduce((a, b) => a + b, 0),
   GET_LATEST_MESSAGE: (state) => (chat) => {
     if (chat.messages.length === 0) return '0 messages'
@@ -38,7 +38,9 @@ export default {
     return latestMessage.received_at
   },
   GET_UNREAD_MESSAGES_COUNT: (state) => (chat) => {
-    return chat.messages.filter((m) => m.unread).length
+    return chat.messages.filter((m) => !m.seen).length
   },
-  GROUP_MESSAGES: (state) => [],
+  CHAT_BY_ID: (state) => (chatId) => {
+    return state.chats.find((c) => c.id === chatId)
+  },
 }

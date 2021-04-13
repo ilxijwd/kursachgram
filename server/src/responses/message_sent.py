@@ -8,8 +8,8 @@ def message_sent(sio, sender, chat, content, files=None):
         {
             'id': str(uuid4()),
             'sender': sender.jsonify(),
-            'сhat': chat_data,
-            'content': content,
+            'chat': chat_data,
+            'content': content or '<empty message>',
             'files': files or [],
         },
         room=chat_data['id'],

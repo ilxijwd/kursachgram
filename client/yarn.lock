@@ -2243,7 +2243,7 @@ axios-retry@^3.1.9:
   dependencies:
     is-retry-allowed "^1.1.0"
 
-axios@^0.21.1, axios@latest:
+axios@^0.21.1:
   version "0.21.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
   integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
@@ -6082,13 +6082,6 @@ nuxt-socket-io@^1.1.14:
     socket.io-client "^3.1.0"
     vue-template-compiler "^2.6.12"
 
-nuxt-vuex-localstorage@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/nuxt-vuex-localstorage/-/nuxt-vuex-localstorage-1.3.0.tgz#a73dc55a372e3bd0fa40f49c9dfacbc082376364"
-  integrity sha512-/+A8pouw/wxywk4pcoz/ZBWPKlVJsRq4wLhgvwGzyXzIIu/9axvzXVS8y5PGI5FxND/zQZUsomVfShLTkDqZuw==
-  dependencies:
-    axios latest
-
 nuxt@^2.14.12:
   version "2.15.3"
   resolved "https://registry.yarnpkg.com/nuxt/-/nuxt-2.15.3.tgz#6262707de8a824df0718fc88653c74a916aa5122"
@@ -7973,6 +7966,11 @@ slice-ansi@^4.0.0:
     ansi-styles "^4.0.0"
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
+
+smile2emoji@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/smile2emoji/-/smile2emoji-1.0.0.tgz#7037e0cfd2939e9926ae817b85115e377192a308"
+  integrity sha512-gDHq7/SCm9juc7LPFIE/Wit8dfv36YQH4JVm3K8oRh2C3c+0R7DwIJzaYlvN/zVN9xYTh5LEpOTGRxdKX/oKtg==
 
 snapdragon-node@^2.0.1:
   version "2.1.1"

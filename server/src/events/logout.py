@@ -29,4 +29,12 @@ def register_event(sio):
 
         user_offline(sio, sid, user)
 
+        for chat in user.chats:
+            if len(chat.participants) == 1:
+                session.delete(chat)
+            else:
+                chat.participants.remove(user)
+
+        session.commit()
+
         sio.save_session(sid, None)

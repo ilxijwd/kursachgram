@@ -4,20 +4,22 @@
       <template v-if="chats.length !== 0">
         <v-card>
           <v-card-title v-if="UNREAD_MESSAGES_COUNT > 0">
-            You have {{ UNREAD_MESSAGES_COUNT }} unread messages
+            You have {{ UNREAD_MESSAGES_COUNT }} unread message{{
+              UNREAD_MESSAGES_COUNT > 1 ? 's' : ''
+            }}
           </v-card-title>
           <v-card-title v-else>Available chats</v-card-title>
         </v-card>
         <v-card class="mt-3">
           <v-card-text class="px-0">
-            <v-list two-line>
+            <v-list two-line class="py-0">
               <v-list-item-group
                 v-model="selectedChats"
                 multiple
                 active-class="blue--text"
               >
                 <v-list-item
-                  v-for="chat in chats"
+                  v-for="(chat, index) in chats"
                   :key="chat.id"
                   @mousedown.stop="mouseDown(index, chat.id)"
                   @mouseup.stop="mouseUp(chat.id)"
@@ -46,11 +48,16 @@
 
                     <v-list-item-action>
                       <v-list-item-action-text>
-                        {{ GET_LATEST_ACTION_TIME(chat) }}
+                        {{ $moment(GET_LATEST_ACTION_TIME(chat)).from(now) }}
                       </v-list-item-action-text>
-                      <v-chip v-if="GET_UNREAD_MESSAGES_COUNT(chat) > 0">
-                        {{ GET_UNREAD_MESSAGES_COUNT(chat) }}
-                      </v-chip>
+                      <v-list-item-action-text>
+                        <v-chip
+                          v-if="GET_UNREAD_MESSAGES_COUNT(chat) > 0"
+                          x-small
+                        >
+                          {{ GET_UNREAD_MESSAGES_COUNT(chat) }}
+                        </v-chip>
+                      </v-list-item-action-text>
                     </v-list-item-action>
                   </template>
                 </v-list-item>
@@ -78,6 +85,7 @@ export default {
   middleware: ['authenticated'],
   data() {
     return {
+      now: Date.now(),
       holdTimeMs: 250,
       mouseDownActive: false,
       selectedChats: [],
@@ -97,6 +105,12 @@ export default {
     selectedChats(newItem) {
       if (newItem.length === 0) this.SET_LIST_IS_SELECTIVE(false)
     },
+  },
+  beforeMount() {
+    this.interval = setInterval(() => (this.now = Date.now()), 1000)
+  },
+  destroyed() {
+    clearInterval(this.interval)
   },
   methods: {
     ...mapMutations('app', ['SET_LIST_IS_SELECTIVE']),

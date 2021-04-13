@@ -3,7 +3,7 @@ import os
 import jwt
 
 from src.db import session, User
-from src.responses import me, users, chats, user_online, error
+from src.responses import me, users, user_online, error
 from src.errors import Errors
 
 
@@ -34,11 +34,6 @@ def register_event(sio):
         sio.save_session(sid, user.jsonify())
 
         me(sio, sid, user)
-
-        chats(sio, sid, user.chats)
-
-        for chat in user.chats:
-            sio.enter_room(user.sid, chat.id)
 
         user_online(sio, sid, user)
 

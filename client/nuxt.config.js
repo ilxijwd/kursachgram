@@ -27,18 +27,9 @@ export default {
 
   components: true,
 
-  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/vuetify'],
+  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/vuetify', '@nuxtjs/moment'],
 
-  modules: [
-    '@nuxtjs/axios',
-    'nuxt-socket-io',
-    [
-      'nuxt-vuex-localstorage',
-      {
-        localStorage: ['app'],
-      },
-    ],
-  ],
+  modules: ['@nuxtjs/axios', 'nuxt-socket-io'],
 
   axios: {},
 
@@ -56,7 +47,6 @@ export default {
             'logged_in --> app/LOGGED_IN',
             'logged_out --> app/LOGGED_OUT',
             'users --> app/USERS',
-            'chats --> app/CHATS',
             'user_online --> app/USER_ONLINE',
             'user_offline --> app/USER_OFFLINE',
             'chat_created --> app/CHAT_CREATED',

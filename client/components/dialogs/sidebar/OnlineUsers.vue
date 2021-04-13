@@ -30,6 +30,12 @@
         </v-list>
       </v-card-text>
     </template>
+    <v-card-actions>
+      <v-spacer />
+      <v-btn color="blue" text @click.stop="CLOSE_DIALOG('online-users')">
+        Close
+      </v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -47,7 +53,9 @@ export default {
       }
     })
   },
-  beforeDestroy() {},
+  beforeDestroy() {
+    this.unsubscribe()
+  },
   methods: {
     ...mapMutations('dialog', ['CLOSE_DIALOG']),
     async createChat(userId) {

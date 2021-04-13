@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isOpened" max-width="290">
+  <v-dialog v-model="isOpened" persistent max-width="290">
     <slot name="content" />
   </v-dialog>
 </template>

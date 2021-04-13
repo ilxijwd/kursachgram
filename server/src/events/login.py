@@ -5,7 +5,7 @@ import jwt
 from werkzeug.security import check_password_hash
 
 from src.db import session, User
-from src.responses import error, logged_in, users, chats, user_online
+from src.responses import error, logged_in, users, user_online
 from src.errors import Errors
 
 
@@ -44,11 +44,6 @@ def register_event(sio):
         sio.save_session(sid, user.jsonify())
 
         user_online(sio, sid, user)
-
-        chats(sio, sid, user.chats)
-
-        for chat in user.chats:
-            sio.enter_room(user.sid, chat.id)
 
         registered_users = session.query(User).filter(User.id != user.id).all()
         users(sio, sid, registered_users)

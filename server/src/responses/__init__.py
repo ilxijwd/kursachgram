@@ -2,7 +2,6 @@ from .error import error
 from .me import me
 from .logged_in import logged_in
 from .users import users
-from .chats import chats
 from .user_online import user_online
 from .user_offline import user_offline
 from .chat_created import chat_created

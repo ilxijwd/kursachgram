@@ -2,6 +2,12 @@
   <v-app dark>
     <v-navigation-drawer v-model="drawer" app>
       <v-list>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title class="text-h4"> Kursachgram </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
         <v-list-item two-line>
           <v-list-item-avatar>
             <img :src="me.avatar_base64" />
