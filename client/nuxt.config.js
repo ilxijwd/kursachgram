@@ -37,7 +37,7 @@ export default {
     sockets: [
       {
         name: 'main',
-        url: 'http://192.168.0.105:8000',
+        url: 'http://192.168.0.106:8000',
         vuex: {
           mutations: [
             'connect --> socket/RESET_ERROR',

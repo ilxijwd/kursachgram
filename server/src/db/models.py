@@ -23,7 +23,7 @@ class User(base):
     username = Column(String(100))
     online = Column(Boolean)
     sid = Column(String(100))
-    logout_timestamp = Column(TIMESTAMP, default=datetime.utcnow)
+    logout_timestamp = Column(TIMESTAMP, default=datetime.now)
     password = Column(Text)
 
     def jsonify(self):
@@ -34,7 +34,7 @@ class User(base):
             'username': self.username,
             'avatar_base64': self.avatar_base64,
             'online': self.online,
-            'logout_timestamp': self.logout_timestamp.timestamp()
+            'logout_timestamp': int(self.logout_timestamp.timestamp())
         }
 
     def __repr__(self):

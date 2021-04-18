@@ -21,7 +21,7 @@ def register_event(sio):
             return error(sio, sid, Errors.NOT_AUTHENTICATED)
 
         user.online = False
-        user.logout_timestamp = datetime.utcnow()
+        user.logout_timestamp = datetime.now()
         session.commit()
 
         user_offline(sio, sid, user)
@@ -32,6 +32,5 @@ def register_event(sio):
             else:
                 chat.participants.remove(user)
 
-        # user.chats[:] = []
         session.commit()
 

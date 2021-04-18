@@ -7967,11 +7967,6 @@ slice-ansi@^4.0.0:
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
 
-smile2emoji@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/smile2emoji/-/smile2emoji-1.0.0.tgz#7037e0cfd2939e9926ae817b85115e377192a308"
-  integrity sha512-gDHq7/SCm9juc7LPFIE/Wit8dfv36YQH4JVm3K8oRh2C3c+0R7DwIJzaYlvN/zVN9xYTh5LEpOTGRxdKX/oKtg==
-
 snapdragon-node@^2.0.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/snapdragon-node/-/snapdragon-node-2.1.1.tgz#6c175f86ff14bdb0724563e8f3c1b021a286853b"

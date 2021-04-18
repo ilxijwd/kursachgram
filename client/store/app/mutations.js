@@ -1,5 +1,3 @@
-import { checkText } from 'smile2emoji'
-
 export default {
   SET_LIST_IS_SELECTIVE(state, isSelective) {
     state.listIsSelective = isSelective
@@ -32,7 +30,7 @@ export default {
           ? { ...state.me }
           : { ...state.users.find((u) => u.id === chat.creator_id) },
       chat: { ...chat },
-      content: checkText('Hello! Lets talk :)'),
+      content: 'Hello! Lets talk 😊',
       files: [],
       seen: chat.creator_id === state.me.id ? undefined : false,
       received_at: Date.now(),
@@ -67,7 +65,6 @@ export default {
     if (chat)
       chat.messages.push({
         ...message,
-        content: checkText(message.content),
         seen: false,
         received_at: Date.now(),
       })

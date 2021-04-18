@@ -21,7 +21,7 @@ def register_event(sio):
             return error(sio, sid, Errors.USER_BY_EMAIL_NOT_FOUND)  # TODO: CHANGE ERROR CODE TO "USER_NOT_FOUND"
 
         user.online = False
-        user.logout_timestamp = datetime.utcnow()
+        user.logout_timestamp = datetime.now()
         session.commit()
 
         for chat in user.chats:

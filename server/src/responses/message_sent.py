@@ -1,4 +1,5 @@
 from uuid import uuid4
+from src.emojifier import emojifier
 
 
 def message_sent(sio, sender, chat, content, files=None):
@@ -9,7 +10,7 @@ def message_sent(sio, sender, chat, content, files=None):
             'id': str(uuid4()),
             'sender': sender.jsonify(),
             'chat': chat_data,
-            'content': content or '<empty message>',
+            'content': emojifier(content) if content else '<empty message>',
             'files': files or [],
         },
         room=chat_data['id'],

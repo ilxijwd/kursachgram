@@ -36,7 +36,7 @@ def register_event(sio):
 
         payload = {
             'id': user.id,
-            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24 * 30)
+            'exp': datetime.now() + timedelta(seconds=60 * 60 * 24 * 30)
         }
 
         logged_in(sio, sid, jwt.encode(payload, os.environ.get("JWT_SECRET"), algorithm='HS256'), user)

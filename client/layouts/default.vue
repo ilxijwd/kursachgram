@@ -1,12 +1,14 @@
 <template>
   <v-app dark>
     <v-navigation-drawer v-model="drawer" app>
-      <v-list>
+      <v-list class="py-0">
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="text-h4"> Kursachgram </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+
+        <v-divider />
 
         <v-list-item two-line>
           <v-list-item-avatar>
@@ -50,12 +52,6 @@
         </v-list-item>
         <v-list-item link>
           <v-list-item-icon>
-            <v-icon>mdi-phone</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Calls</v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-icon>
             <v-icon>mdi-folder</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Files</v-list-item-title>
@@ -81,9 +77,7 @@
         <v-tab @click.stop="$router.push('/chats')">
           <v-badge dot :value="UNREAD_MESSAGES_COUNT">Chats</v-badge>
         </v-tab>
-        <v-tab @click.stop="$router.push('/calls')">
-          <v-badge dot :value="calls">Calls</v-badge>
-        </v-tab>
+        <v-tab @click.stop="$router.push('/users')"> Users </v-tab>
       </v-tabs>
       <v-btn icon @click.stop="search = !search">
         <v-icon>mdi-magnify</v-icon>
@@ -124,7 +118,7 @@
 import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
   data() {
-    return { drawer: false, messages: 1, calls: 0, fab: false, search: false }
+    return { drawer: false, fab: false, search: false }
   },
   computed: {
     ...mapState('app', ['me', 'listIsSelective']),

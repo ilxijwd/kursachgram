@@ -37,5 +37,5 @@ def register_event(sio):
 
         user_online(sio, sid, user)
 
-        online_users = session.query(User).filter(User.id != user.id).all()
-        users(sio, sid, online_users)
+        all_users = session.query(User).filter(User.id != user.id).all()
+        users(sio, sid, all_users)

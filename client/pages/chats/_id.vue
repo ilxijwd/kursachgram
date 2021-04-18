@@ -144,15 +144,11 @@ export default {
   },
   mounted() {
     this.$store.commit('app/MARK_SEEN', this.$route.params.id)
-    this.$nextTick(() => {
-      window.scrollTo(0, document.body.clientHeight)
-    })
+    this.$vuetify.goTo(999999)
     this.unsubscribe = this.$store.subscribe((mutation) => {
       if (mutation.type === 'app/MESSAGE_SENT') {
         this.$store.commit('app/MARK_SEEN', this.$route.params.id)
-        this.$nextTick(() => {
-          window.scrollTo(0, document.body.scrollHeight)
-        })
+        this.$vuetify.goTo(999999)
       }
     })
   },
