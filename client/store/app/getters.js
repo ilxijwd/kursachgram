@@ -43,4 +43,13 @@ export default {
   CHAT_BY_ID: (state) => (chatId) => {
     return state.chats.find((c) => c.id === chatId)
   },
+  FILES: (state) => {
+    const files = []
+    state.chats.forEach((c) => {
+      c.messages.forEach((m) => {
+        if (m.files.length !== 0) files.push(...m.files)
+      })
+    })
+    return files
+  },
 }

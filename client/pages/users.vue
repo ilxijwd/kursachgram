@@ -19,7 +19,7 @@
                 @click.stop="createChat(user.id)"
               >
                 <template v-if="user.online">
-                  <v-badge bottom dot overlap>
+                  <v-badge bottom dot overlap color="green">
                     <v-list-item-avatar class="ma-0">
                       <img :src="user.avatar_base64" alt="" />
                     </v-list-item-avatar>

@@ -34,6 +34,18 @@
         </template>
       </dialogs-template>
 
+      <dialogs-template dialog-name="create-group">
+        <template #content>
+          <dialogs-sidebar-create-group />
+        </template>
+      </dialogs-template>
+
+      <dialogs-template dialog-name="files">
+        <template #content>
+          <dialogs-sidebar-files />
+        </template>
+      </dialogs-template>
+
       <v-list nav dense>
         <v-list-item
           link
@@ -44,23 +56,23 @@
           </v-list-item-icon>
           <v-list-item-title>Online users</v-list-item-title>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item
+          link
+          @click.stop="drawer = !drawer || OPEN_DIALOG('create-group')"
+        >
           <v-list-item-icon>
             <v-icon>mdi-account-multiple</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Create group</v-list-item-title>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item
+          link
+          @click.stop="drawer = !drawer || OPEN_DIALOG('files')"
+        >
           <v-list-item-icon>
             <v-icon>mdi-folder</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Files</v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-icon>
-            <v-icon>mdi-cog</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Settings</v-list-item-title>
         </v-list-item>
         <v-list-item link @click.stop="$router.push('/logout')">
           <v-list-item-icon>

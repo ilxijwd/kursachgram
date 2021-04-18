@@ -19,7 +19,19 @@ export default {
   },
   USER_OFFLINE(state, user) {
     const userIdx = state.users.findIndex((u) => u.id === user.id)
-    if (userIdx !== -1) state.users.splice(userIdx, 1, { ...user })
+    if (userIdx !== -1) {
+      state.users.splice(userIdx, 1, { ...user })
+
+      const chatsToDelete = []
+      state.chats.forEach((c, i) => {
+        const participant = c.participants.find((p) => p.id === user.id)
+        if (participant && c.participants.length <= 2) chatsToDelete.push(i)
+      })
+
+      while (chatsToDelete.length) {
+        state.chats.splice(chatsToDelete.pop(), 1)
+      }
+    }
   },
   CHAT_CREATED(state, chat) {
     let newChat
