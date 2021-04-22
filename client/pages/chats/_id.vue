@@ -150,6 +150,7 @@ export default {
         this.$store.commit('app/MARK_SEEN', this.$route.params.id)
         this.$vuetify.goTo(999999)
       }
+      if (mutation.type === 'app/CHAT_DELETED') this.$router.push('/chats')
     })
   },
   destroyed() {
